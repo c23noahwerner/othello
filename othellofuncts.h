@@ -95,10 +95,9 @@ typedef struct board_struct{
     int unflips;
 }board;
 
-void runUI();
-
-board startGame();
-int playerTurn(int player, board* game); 
+void runUI(); //NEED UI RUNNING AND SET UP FOR THIS
+board startGame(); //implemented
+int playerTurn(int player, board* game); //logic implemented, NEED UI RUNNING AND SET UP FOR THIS
 int swapTurn(int currPlayer); //implemented 
 int checkPosition(int player, position* play,board* game); //implemented, fixme
 int flips(int player, position* pos, board* game); // implemented, fixme
