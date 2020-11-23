@@ -19,13 +19,16 @@ board startGame(){
             game.board[i][j].col = j;
         }
     }
+    game.board[4][4].color = 1;
+    game.board[5][5].color = 1;
+    game.board[4][5].color = 0;
+    game.board[5][4].color = 0;
+    checkStatus(&game);
     return game;
 }
-
 int swapTurn(int currPlayer){
     return !(currPlayer);
 }
-
 int gameOver(board* game){
     if(availableTurn(0,game)==0 && availableTurn(1,game)==0){
         if(game->blacks > game->whites){
@@ -46,12 +49,10 @@ int gameOver(board* game){
     }
     return -1;
 }
-
 position* pickMoveAI(position* moves, int numMoves){
     int moveIndex = rand()%numMoves;
     return &moves[moveIndex];
 }
-
 int playerTurn(int player, board* game){
     //when player clicks with mouse
     int mouseX = 0; // initialize x
@@ -63,9 +64,9 @@ int playerTurn(int player, board* game){
         mouseY = 1; // where click;
         play = whichPosition(mouseX,mouseY);
     }while (!checkPosition(player, play,game));
+    flips(player,play,game);
     return 0;
 }
-
 int checkPosition(int player, position* play,board* game){
     //if all 4 surrounding position are same color as player
     return 0;
@@ -93,7 +94,7 @@ int checkFlip(board* game){
     for(int i = 0; i < 8; i++){
         for (int j = 0; j < 8; j++){
             if(flippable(game,&game->board[i][j])){
-                numUnflip = 1;
+                numUnflip += 1;
                 game->board[i][j].flippable = 0;
             }
         }
@@ -101,7 +102,6 @@ int checkFlip(board* game){
     game->unflips = numUnflip;
     return numUnflip;
 }
-
 int flippable(board* game, position* pos){
     //if corner
     return 0;
@@ -114,7 +114,6 @@ int flippable(board* game, position* pos){
     //else
     return 1;
 }
-
 int flips(int player, position* pos, board* game){
     pos->color = player;
     position* flippers;
@@ -133,4 +132,61 @@ int flips(int player, position* pos, board* game){
     for(int i = 0; i < flipperIndex; i++){
         flippers[i].color = !(flippers[i].color);
     }
+}
+int availableTurn(int player, board* game){
+    for(int i = 0; i < 8;i++){
+        for(int j = 0; j < 8; j++){
+            if(game->board[i][j].color < 0 && checkPosition(player, &game->board[i][j],game)){
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+void moveAI(position* move, board* game){
+    flips(0,move,game);
+}
+position* movesAI(board* game){
+    position* moves;
+    int movesIndex = 0;
+    for(int i = 0; i < 8;i++){
+        for(int j = 0; j < 8; j++){
+            if(game->board[i][j].color < 0 && checkPosition(0, &game->board[i][j],game)){
+                moves[movesIndex] = game->board[i][j];
+                movesIndex++;
+            }
+        }
+    }
+    return moves;
+}
+int checkWhites(board* game){
+    int numWhite = 0;
+    for(int i = 0; i < 8; i++){
+        for (int j = 0; j < 8; j++){
+            if(game->board[i][j].color == 1){
+                numWhite += 1;
+            }
+        }
+    }
+    game->whites = numWhite;
+    return numWhite;
+}
+int checkBlacks(board* game){
+    int numBlack = 0;
+    for(int i = 0; i < 8; i++){
+        for (int j = 0; j < 8; j++){
+            if(game->board[i][j].color == 0){
+                numBlack += 1;
+            }
+        }
+    }
+    game->blacks = numBlack;
+    return numBlack;
+}
+int checkStatus(board* game){
+    checkFlip(game);
+    checkWhites(game);
+    checkBlacks(game);
+    updateBoard(game);
+    return 0;
 }

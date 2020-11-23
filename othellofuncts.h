@@ -98,19 +98,20 @@ typedef struct board_struct{
 void runUI();
 
 board startGame();
-
-int playerTurn(int player, board* game);
-int swapTurn(int currPlayer);
-int checkPosition(int player, position* play,board* game);
-int flips(int player, position* pos, board* game);
-int checkStatus(board* game);
-int checkFlip(board* game);
-int availableTurn(int player, board* game);
-int updateBoard(board* game);
-int movesAI(board* game, position* moves);
-position* pickMoveAI(position* moves, int numMoves);
-void moveAI(position* move);
-int gameOver(board* game); //implemented, finished
-position* whichPosition(int xcoord, int ycoord); 
+int playerTurn(int player, board* game); 
+int swapTurn(int currPlayer); //implemented 
+int checkPosition(int player, position* play,board* game); //implemented, fixme
+int flips(int player, position* pos, board* game); // implemented, fixme
+int checkStatus(board* game); //implemented
+int checkWhites(board* game); //implemented
+int checkBlacks(board* game); //implemented
+int checkFlip(board* game); //implemented
+int availableTurn(int player, board* game); //implemented
+int updateBoard(board* game);  //NEED UI RUNNING AND SET UP FOR THIS
+position* movesAI(board* game); //implemented
+position* pickMoveAI(position* moves, int numMoves); //implemented
+void moveAI(position* move, board* game); //implemented
+int gameOver(board* game); //implemented
+position* whichPosition(int xcoord, int ycoord); //NEED UI RUNNING AND SET UP FOR THIS
 int flippable(board* game, position* pos); //implemented, fixme
 #endif
