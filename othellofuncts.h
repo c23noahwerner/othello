@@ -79,11 +79,13 @@
 #ifndef OTHELLOFUNCTS_H
 #define OTHELLOFUNCTS_H
 #include "Windows.h"
-
+ 
 typedef struct position_struct{
     int full;
     int color;
     int flippable;
+    int row;
+    int col;
 }position;
 
 typedef struct board_struct{
@@ -99,8 +101,8 @@ board startGame();
 
 int playerTurn(int player, board* game);
 int swapTurn(int currPlayer);
-int checkPosition(position* play,board* game);
-int flips(position* position, board* game);
+int checkPosition(int player, position* play,board* game);
+int flips(int player, position* pos, board* game);
 int checkStatus(board* game);
 int checkFlip(board* game);
 int availableTurn(int player, board* game);
@@ -108,6 +110,7 @@ int updateBoard(board* game);
 int movesAI(board* game, position* moves);
 position* pickMoveAI(position* moves, int numMoves);
 void moveAI(position* move);
-int gameOver(board* game);
-position* whichPosition(int xcoord, int ycoord);
+int gameOver(board* game); //implemented, finished
+position* whichPosition(int xcoord, int ycoord); 
+int flippable(board* game, position* pos); //implemented, fixme
 #endif
