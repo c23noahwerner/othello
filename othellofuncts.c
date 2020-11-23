@@ -50,7 +50,7 @@ position* pickMoveAI(position* moves, int numMoves){
     return &moves[moveIndex];
 }
 
-int playerTurn(int player, board* game){
+ int playerTurn(int player, board* game){
     //when player clicks with mouse
     int mouseX = 0; // initialize x
     int mouseY = 0; // initialize y
@@ -61,4 +61,5 @@ int playerTurn(int player, board* game){
         mouseY = 1; // where click;
         play = whichPosition(mouseX,mouseY);
     }while (!checkPosition(play,game));
+    return 0;
 }
