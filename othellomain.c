@@ -33,7 +33,21 @@ int main(){
     printf("\nTesting available turn: \n");
     printf("availableTurn(1,&game), expect 40 calls to checkposition, return:\n");
     availableTurn(1,&game);
+
+    printf("\ntesting flips: \n");
+    //printf("flips(player,&game.board[3][4],game),expects 1, return: %d\n",flips(0,&game.board[4][6],&game));
+    game.board[3][5].color = 0;
+    printf("flips(player,&game.board[2][5],game, expects 2, return: %d\n",flips(1,&game.board[2][5],&game));
+    printf("works for vertical flips, still working out the horizontal and diagonal algorithms.\n I also recognize that this is the same sort of checking for the other checkPosition and availableTurn functions!\n");
+    printf("\ncheckWhites testing: \n");
+    printf("checkWhites(game), expects 5, returns: %d \n",checkWhites(&game));
     
+    game.board[5][5].color = 0;
+    printf("flips(player,&game.board[1][5],game, expects 3, return: %d\n",flips(0,&game.board[1][5],&game)); 
+
+
+    printf("\ncheckWhites testing: \n");
+    printf("checkWhites(game), expects 1, returns: %d \n",checkWhites(&game));
     //seed the time for rand pls 
     system("pause");
     return 0;

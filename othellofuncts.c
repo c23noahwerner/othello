@@ -138,7 +138,7 @@ int flippable(board* game, position* pos){
 int flips(int player, position* pos, board* game){
     printf("\t\tcalled flips\n");
     pos->color = player;
-    position flippers[64];
+    position** flippers;
     int flipperIndex = 0;
     int vertCheck = 0;
     int horzCheck = 0;
@@ -160,10 +160,10 @@ int flips(int player, position* pos, board* game){
                 }
             }
             if(vertCheck){
-                for(int l = i-1; l > -1;l++){
+                for(int l = i-1; l > -1;l--){
                     if(game->board[l][j].color < 0){break;}
                     if(game->board[l][j].color == !(game->board[i][j].color)){
-                        flippers[flipperIndex] = game->board[i][j];
+                        flippers[flipperIndex] = &game->board[i][j];
                         flipperIndex++;
                     }
                 }
@@ -177,30 +177,72 @@ int flips(int player, position* pos, board* game){
                 }
             }
             if(horzCheck){
-                for(int l = i-1; l > -1;l++){
+                for(int l = i-1; l > -1;l--){
                     if(game->board[i][l].color < 0){break;}
                     if(game->board[i][l].color == !(game->board[i][j].color)){
                         for(int m = 0; m < flipperIndex; m++){
-                            if(flippers[m].col == game->board[i][j].col && flippers[m].row == game->board[i][j].row){
+                            if(flippers[m] = &game->board[i][j]){
                                 alreadyIn = 1;
                             }
                         }
                         if(!alreadyIn){
-                            flippers[flipperIndex] = game->board[i][j];
+                            flippers[flipperIndex] = &game->board[i][j];
                             flipperIndex++;
                         }
                     }
                 }
             }
             //||check top left to bottom right diagonal to see if its surrounded or in a surrounded line
+            for(int k = i+1, l = j-1; (k < 8) && (l > -1);k++,l--){
+                if(game->board[k][l].color < 0){break;}
+                if(game->board[k][l].color == !(game->board[i][j].color)){
+                    topDcheck = 1;
+                }
+            }
+            if(topDcheck){
+                for(int m = i-1, n = j+1; (m > -1) && (n < 8);m--,n++){
+                    if(game->board[m][n].color < 0){break;}
+                    if(game->board[m][n].color == !(game->board[i][j].color)){
+                        for(int o = 0; o < flipperIndex; o++){
+                            if(flippers[o] = &game->board[i][j]){
+                                alreadyIn = 1;
+                            }
+                        }
+                        if(!alreadyIn){
+                            flippers[flipperIndex] = &game->board[i][j];
+                            flipperIndex++;
+                        }
+                    }
+                }
+            }
             //||check bottom left to top right diagonal to see if its surrounded or in a surrounded line
-                flippers[flipperIndex] = game->board[i][j];
-                flipperIndex++;
+            for(int k = i+1, l = j+1; (k < 8) && (l < 8);k++,l++){
+                if(game->board[k][l].color < 0){break;}
+                if(game->board[k][l].color == !(game->board[i][j].color)){
+                    botUcheck = 1;
+                }
+            }
+            if(botUcheck){
+                for(int m = i-1, n = j-1; (m > -1) && (n > -1);m--,n--){
+                    if(game->board[m][n].color < 0){break;}
+                    if(game->board[m][n].color == !(game->board[i][j].color)){
+                        for(int o = 0; o < flipperIndex; o++){
+                            if(flippers[o] = &game->board[i][j]){
+                                alreadyIn = 1;
+                            }
+                        }
+                        if(!alreadyIn){
+                            flippers[flipperIndex] = &game->board[i][j];
+                            flipperIndex++;
+                        }
+                    }
+                }
+            }
         }
     }
     //flips all the colors, uses pointers so this should be pretty obvious
     for(int i = 0; i < flipperIndex; i++){
-        flippers[i].color = !(flippers[i].color);
+        flippers[i]->color = !(flippers[i]->color);
     } 
     return flipperIndex;
 }
@@ -267,11 +309,11 @@ int checkBlacks(board* game){
 int checkStatus(board* game){
     printf("\t\tcalled checkStatus\n");
     printf("\t");
-    checkFlip(game);
+    game->unflips = checkFlip(game);
     printf("\t");
-    checkWhites(game);
+    game->whites = checkWhites(game);
     printf("\t");
-    checkBlacks(game);
+    game->blacks = checkBlacks(game);
     //updateBoard(game);
     return 0;
 } 
