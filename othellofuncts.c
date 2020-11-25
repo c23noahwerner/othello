@@ -1,15 +1,18 @@
 #include "othellofuncts.h"
 #include <windows.h>
 
-
+ 
 board startGame(){
+    printf("\t\tcalled startGame\n");
     board game;
-    for (int i = 0; i < 8; i++){
+     for (int i = 0; i < 8; i++){
         game.board[i] = (position*)malloc(8*sizeof(position));
     }
+    
     game.blacks = 0;
     game.whites = 0;
     game.unflips = 0;
+    
     for (int i = 0; i < 8; i++){
         for (int j = 0; j < 8; j++){
             game.board[i][j].full = 0;
@@ -19,16 +22,21 @@ board startGame(){
             game.board[i][j].col = j;
         }
     }
+    
     game.board[4][4].color = 1;
     game.board[5][5].color = 1;
     game.board[4][5].color = 0;
     game.board[5][4].color = 0;
-    checkStatus(&game);
+    printf("\t");
+    checkStatus(&game); 
     return game;
 }
+
 int swapTurn(int currPlayer){
+    printf("\t\tcalled swapTurn\n");
     return !(currPlayer);
 }
+/*
 int gameOver(board* game){
     if(availableTurn(0,game)==0 && availableTurn(1,game)==0){
         if(game->blacks > game->whites){
@@ -49,10 +57,14 @@ int gameOver(board* game){
     }
     return -1;
 }
+*/
+
 position* pickMoveAI(position* moves, int numMoves){
+    printf("\t\tcalled pickMoveAI\n");
     int moveIndex = rand()%numMoves;
     return &moves[moveIndex];
 }
+/*
 int playerTurn(int player, board* game){
     //when player clicks with mouse
     int mouseX = 0; // initialize x
@@ -67,7 +79,9 @@ int playerTurn(int player, board* game){
     flips(player,play,game);
     return 0;
 }
+*/
 int checkPosition(int player, position* play,board* game){
+    printf("\t\tcalled checkposition\n");
     //if all 4 surrounding position are same color as player
     return 0;
     //check directly above if not on edge: if finds opposite color, then same color
@@ -89,20 +103,26 @@ int checkPosition(int player, position* play,board* game){
     //if none of the above,
     return 0;
 }
+
 int checkFlip(board* game){
     int numUnflip = 0;
-    for(int i = 0; i < 8; i++){
+    /* for(int i = 0; i < 8; i++){
         for (int j = 0; j < 8; j++){
             if(flippable(game,&game->board[i][j])){
                 numUnflip += 1;
                 game->board[i][j].flippable = 0;
             }
         }
-    }
+    } */
+    printf("\t\tcalled checkFlip\n");
+    printf("\t");
+    flippable(game,&game->board[0][0]);
     game->unflips = numUnflip;
     return numUnflip;
 }
+
 int flippable(board* game, position* pos){
+    printf("\t\tcalled flippable\n");
     //if corner
     return 0;
     //if edge and edge is full
@@ -114,14 +134,64 @@ int flippable(board* game, position* pos){
     //else
     return 1;
 }
+
 int flips(int player, position* pos, board* game){
+    printf("\t\tcalled flips\n");
     pos->color = player;
-    position* flippers;
+    position flippers[64];
     int flipperIndex = 0;
+    int vertCheck = 0;
+    int horzCheck = 0;
+    int topDcheck = 0;
+    int botUcheck = 0;
+    int alreadyIn = 0;
     for(int i =0; i < 8; i++){
         for(int j = 0; j < 8; j++){
             //check up and down to see if its surrounded or in a surrounded line
+            vertCheck = 0;
+            horzCheck = 0;
+            topDcheck = 0;
+            botUcheck = 0;
+            alreadyIn = 0;
+            for(int k = i+1; k < 8;k++){
+                if(game->board[k][j].color < 0){break;}
+                if(game->board[k][j].color == !(game->board[i][j].color)){
+                    vertCheck = 1;
+                }
+            }
+            if(vertCheck){
+                for(int l = i-1; l > -1;l++){
+                    if(game->board[l][j].color < 0){break;}
+                    if(game->board[l][j].color == !(game->board[i][j].color)){
+                        flippers[flipperIndex] = game->board[i][j];
+                        flipperIndex++;
+                    }
+                }
+            }
+
             //||check left anad right to see if its surrounded or in a surrounded line
+            for(int k = i+1; k < 8;k++){
+                if(game->board[i][k].color < 0){break;}
+                if(game->board[i][k].color == !(game->board[i][j].color)){
+                    horzCheck = 1;
+                }
+            }
+            if(horzCheck){
+                for(int l = i-1; l > -1;l++){
+                    if(game->board[i][l].color < 0){break;}
+                    if(game->board[i][l].color == !(game->board[i][j].color)){
+                        for(int m = 0; m < flipperIndex; m++){
+                            if(flippers[m].col == game->board[i][j].col && flippers[m].row == game->board[i][j].row){
+                                alreadyIn = 1;
+                            }
+                        }
+                        if(!alreadyIn){
+                            flippers[flipperIndex] = game->board[i][j];
+                            flipperIndex++;
+                        }
+                    }
+                }
+            }
             //||check top left to bottom right diagonal to see if its surrounded or in a surrounded line
             //||check bottom left to top right diagonal to see if its surrounded or in a surrounded line
                 flippers[flipperIndex] = game->board[i][j];
@@ -131,8 +201,10 @@ int flips(int player, position* pos, board* game){
     //flips all the colors, uses pointers so this should be pretty obvious
     for(int i = 0; i < flipperIndex; i++){
         flippers[i].color = !(flippers[i].color);
-    }
+    } 
+    return flipperIndex;
 }
+
 int availableTurn(int player, board* game){
     for(int i = 0; i < 8;i++){
         for(int j = 0; j < 8; j++){
@@ -143,9 +215,13 @@ int availableTurn(int player, board* game){
     }
     return 0;
 }
+
 void moveAI(position* move, board* game){
+    printf("\t\tcalled moveAI\n");
+    printf("\t");
     flips(0,move,game);
 }
+/*
 position* movesAI(board* game){
     position* moves;
     int movesIndex = 0;
@@ -159,7 +235,9 @@ position* movesAI(board* game){
     }
     return moves;
 }
+*/
 int checkWhites(board* game){
+    printf("\t\tcalled checkWhites\n");
     int numWhite = 0;
     for(int i = 0; i < 8; i++){
         for (int j = 0; j < 8; j++){
@@ -171,7 +249,9 @@ int checkWhites(board* game){
     game->whites = numWhite;
     return numWhite;
 }
+
 int checkBlacks(board* game){
+    printf("\t\tcalled checkBlacks\n");
     int numBlack = 0;
     for(int i = 0; i < 8; i++){
         for (int j = 0; j < 8; j++){
@@ -183,10 +263,15 @@ int checkBlacks(board* game){
     game->blacks = numBlack;
     return numBlack;
 }
+
 int checkStatus(board* game){
+    printf("\t\tcalled checkStatus\n");
+    printf("\t");
     checkFlip(game);
+    printf("\t");
     checkWhites(game);
+    printf("\t");
     checkBlacks(game);
-    updateBoard(game);
+    //updateBoard(game);
     return 0;
-}
+} 

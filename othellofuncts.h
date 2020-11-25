@@ -3,9 +3,8 @@
 * Name: Noah Werner, Fall 2020
 * Section: M6A
 * Project: Final Project - Othello
-* Description: The game runs using windows.h and is an interactive board game intended to function exactly like the othello board game
-* Documentation Statement: I copied and pasted the function header for the main from the windowsline example after researching what each paramater
-* was used for. 
+* Description: The game runs using curses.h and is an interactive board game intended to function exactly like the othello board game
+* Documentation Statement: None so far
 * ==============================================================
 * UserManual/Instructions:
 *   Replace this paragraph with instructions on how to build, run,
@@ -24,26 +23,26 @@
  *              Line#: (line in file where it is located)
  *   2) Pointers
  *          What you did to meet this req: xxx
- *              File:
+ *              File: othellofuncts.c
  *              Line#:
- *   3) File I/O
+ *   3) File I/O - not included
  *          What you did to meet this req: xxx
  *              File:
  *              Line#:
  *   4) Structs
  *          What you did to meet this req: xxx
- *              File:
+ *              File: othellofuncts.h
  *              Line#:
  *
- *   5) String Manipulation
+ *   5) String Manipulation 
  *          What you did to meet this req: xxx
- *              File:
+ *              File: 
  *              Line#:
  *
  *   6) Processing of Array Data
  *          What you did to meet this req: xxx
- *              File:
- *              Line#:
+ *              File: othellofuncts.c
+ *              Line#: damn near all of the functions
  *
  *  Required Advanced Programming Skills (1 or more):
  *   1) Recursion
@@ -53,12 +52,12 @@
  *
  *   2) 2D Dynamic Memory
  *          What you did to meet this req: xxx
- *              File:
+ *              File: othellofuncts.c
  *              Line#:
  *
  *   3) Graphics - Curses or Win32
  *          What you did to meet this req: xxx
- *              File:
+ *              File: othellofuncts.c
  *              Line#:
  *
  *   List any changes or omissions from stated shall requirements (from
@@ -72,14 +71,13 @@
  *          1)
  *          2)
  *
- *   How many hours did you spend on this project: 3
- *   How many lines of code did you write in total: 28
+ *   How many hours did you spend on this project: 6
+ *   How many lines of code did you write in total: 230
  *
 */
 #ifndef OTHELLOFUNCTS_H
 #define OTHELLOFUNCTS_H
-#include "Windows.h"
- 
+
 typedef struct position_struct{
     int full;
     int color;
